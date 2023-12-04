@@ -1,0 +1,24 @@
+[
+    {
+      "type": "Condominium",
+      "description": "Modern urban living awaits in this stylish condominium. Enjoy premium amenities and a central location.",
+      "price": "$300,000 - $600,000",
+      "size": "800 - 1,200 sq. ft.",
+      "image": "https://i.ibb.co/fQC0yQk/Condominium.jpg"
+    },
+    {
+      "type": "Single-Family Home",
+      "description": "Experience comfort and space in this charming single-family home with a spacious yard for family gatherings.",
+      "price": "$400,000 - $800,000",
+      "size": "1,500 - 2,500 sq. ft.",
+      "image": "https://i.ibb.co/McjsSZV/Single-Family-Home.jpg"
+    },
+    {
+      "type": "Townhouse",
+      "description": "Contemporary townhouse living in a vibrant community. Stylish design, convenience, and a sense of community.",
+      "price": "$350,000 - $700,000",
+      "size": "1,200 - 1,800 sq. ft.",
+      "image": "https://i.ibb.co/b6hBwQp/Townhouse.jpg"
+    }
+]
+  
