@@ -52,14 +52,14 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      {
-        path: "/Payment",
-        element: (
-          <PrivateRoute>
-            <Payment></Payment>
-          </PrivateRoute>
-        ),
-      },
+      // {
+      //   path: "/Payment",
+      //   element: (
+      //     <PrivateRoute>
+      //       <Payment></Payment>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: '/Detail/:email',
         element: (
