@@ -10,6 +10,7 @@ const WorkSheet = () => {
 
   return (
     <div>
+      <h3 className='text-5xl text-center font-bold text-[#F85A47]'>Employees Work Record</h3>
       <table className="table">
         <thead>
           <tr>

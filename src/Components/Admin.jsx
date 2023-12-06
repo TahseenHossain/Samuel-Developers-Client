@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import useAxiosSecure from "./useAxiosSecure";
 import { AuthContext } from "./Provider/AuthProvider";
-import { useContext } from "react";
 import Swal from "sweetalert2";
 
 const Admin = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState([]);
-  const [role, setRole] = useState([]);
-  const [index, setIndex] = useState(null);
+  const [roles, setRoles] = useState([]);
+  // const [index, setIndex] = useState(null);
   const [refreshData, setRefreshData] = useState(false);
 
   useEffect(() => {
@@ -27,8 +26,28 @@ const Admin = () => {
     }
   }, [axiosSecure, user, refreshData]);
 
-  const handleUpdateRole = (id, selectedRole, currentIndex) => {
-    fetch(`https://samuel-developers-server.vercel.app/user/${id}`, {
+  
+  const handleUpdateRole = (id) => {
+    Swal.fire({
+      title: "Update Role",
+      text: "Select the new role for the user:",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "HR",
+      cancelButtonText: "Employee",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updateRole(id, "HR");
+      } else {
+        updateRole(id, "employee");
+      }
+    });
+  };
+  
+  const updateRole = (id, selectedRole) => {
+    fetch(`https://samuel-developers-server.vercel.app/user/role/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -38,42 +57,48 @@ const Admin = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          setRole((prevRole) => {
-            const index = prevRole.findIndex((role) => role._id === id);
-            const updatedRoles = [...prevRole];
-            updatedRoles[index] = {
-              ...updatedRoles[index],
-              role: selectedRole,
-            };
-            return updatedRoles;
-          });
-
-          Swal.fire({
-            icon: "success",
-            title: "Role Updated Successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            document.getElementById(`update_modal_${currentIndex}`).close();
-            setRefreshData((prevRefreshData) => !prevRefreshData);
-          });
+          
+          fetch(`https://samuel-developers-server.vercel.app/user/${id}`)
+            .then((res) => res.json())
+            .then((updatedUserData) => {
+              setUserData((prevData) =>
+                prevData.map((user) => (user._id === id ? updatedUserData : user))
+              );
+              Swal.fire({
+                icon: "success",
+                title: "Role Updated Successfully!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((error) => {
+              console.error("Error updating user role:", error);
+            });
         } else {
           Swal.fire({
             icon: "error",
             title: "Error updating role",
             text: "An error occurred while updating the role. Please try again.",
+            confirmButtonText: "Ok",
             showConfirmButton: true,
           });
         }
       })
-
       .catch((error) => {
-        console.error("Error updating role:", error);
-      })
-      .finally(() => {
-        document.getElementById(`update_modal_${index}`).close();
+        console.error("Error updating user role:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error updating role",
+          text: "An unexpected error occurred. Please try again later.",
+          confirmButtonText: "Ok",
+          showConfirmButton: true,
+        });
       });
   };
+  
+  
+  
+  
 
   const handleFire = (id) => {
     Swal.fire({
@@ -143,8 +168,8 @@ const Admin = () => {
                 <td className="py-2 px-4">
                   <button
                     className="btn text-[#F85A47]"
-                    onClick={() =>{
-                        handleFire(employee._id);
+                    onClick={() => {
+                      handleFire(employee._id);
                     }}
                   >
                     Fire
@@ -152,40 +177,14 @@ const Admin = () => {
                 </td>
 
                 <td className="py-2 px-4">
-                  <div className="dropdown dropdown-hover">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="btn m-1 text-[#F85A47]"
-                    >
-                      Update
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      <li>
-                        <button
-                          className="btn text-[#F85A47]"
-                          onClick={() => {
-                            handleUpdateRole(employee._id, "HR", currentIndex);
-                          }}
-                        >
-                          HR
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn text-[#F85A47]"
-                          onClick={() => {
-                            handleUpdateRole(employee._id, "employee");
-                          }}
-                        >
-                          Employee
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+                  <button
+                    className="btn text-[#F85A47]"
+                    onClick={() => {
+                      handleUpdateRole(employee._id);
+                    }}
+                  >
+                    Update Role
+                  </button>
                 </td>
               </tr>
             ))}

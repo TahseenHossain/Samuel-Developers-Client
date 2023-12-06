@@ -9,12 +9,12 @@ const LogIn = () => {
   const { signInUser, signInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogIn = event => {
+  const handleLogIn = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-
+  
     signInUser(email, password)
       .then((result) => {
         Swal.fire({
@@ -25,9 +25,9 @@ const LogIn = () => {
         });
         navigate("/");
       })
-
       .catch((error) => {
-        e.target.reset();
+        // Use 'event.target.reset()' instead of 'e.target.reset()'
+        form.reset();
         console.error(error);
         setLogInError(error.message);
         Swal.fire({
@@ -38,6 +38,7 @@ const LogIn = () => {
         });
       });
   };
+  
 
   const handleGoogleSignIn = async () => {
     try {
@@ -112,14 +113,13 @@ const LogIn = () => {
               Sign Up
             </button>
           </Link>
-          <Link to="/SignIn">
-            <button
-              onClick={handleGoogleSignIn}
-              className="btn bg-[#F85A47] hover:bg-red-600 text-white w-96"
-            >
-              Google
-            </button>
-          </Link>
+
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn bg-[#F85A47] hover:bg-red-600 text-white w-96"
+          >
+            Google
+          </button>
         </div>
       </div>
     </div>

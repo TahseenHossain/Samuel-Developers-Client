@@ -36,13 +36,16 @@ const Employees = () => {
     };
 
     try {
-      const res = await fetch("https://samuel-developers-server.vercel.app/workSheet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newWorkSheet),
-      });
+      const res = await fetch(
+        "https://samuel-developers-server.vercel.app/workSheet",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newWorkSheet),
+        }
+      );
 
       const data = await res.json();
 
@@ -68,17 +71,20 @@ const Employees = () => {
 
   useEffect(() => {
     if (authUserEmail) {
-      fetch(`https://samuel-developers-server.vercel.app/pay?email=${authUserEmail}`)
+      fetch(
+        `https://samuel-developers-server.vercel.app/pay?email=${authUserEmail}`
+      )
         .then((res) => res.json())
         .then((data) => setWorks(data));
     }
   }, [authUserEmail]);
 
+  const filteredWorks = works.filter((work) => work.email === authUserEmail);
 
   return (
     <div>
       <div className="overflow-x-auto">
-        <h2 className="text-center text-4xl">Detail</h2>
+        <h2 className="text-5xl text-center font-bold text-[#F85A47]">Detail</h2>
         <table className="table">
           {/* head */}
           <thead>
@@ -111,28 +117,32 @@ const Employees = () => {
           </tbody>
         </table>
 
-        <h2 className="text-center text-4xl">Payment History</h2>
+        <h2 className="text-5xl text-center font-bold text-[#F85A47]">Payment History</h2>
         <table className="table">
           <thead>
             <tr>
               <th>Month</th>
+              <th>Year</th>
               <th>Amount</th>
               <th>Transaction Id</th>
-              </tr>
+              <th>Email</th>
+            </tr>
           </thead>
 
           <tbody>
-            {works.map((work) => (
+            {filteredWorks.map((work) => (
               <tr key={work._id}>
                 <td>{work.month}</td>
                 <td>{work.year}</td>
+                <td>{work.salary}</td>
                 <td>{work._id}</td>
+                <td>{work.email}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        <h2 className="text-center text-4xl">Add New Work</h2>
+        <h2 className="text-5xl text-center font-bold text-[#F85A47]">Add New Work</h2>
         <form onSubmit={handleWorkSheet}>
           <table className="table">
             <thead>
